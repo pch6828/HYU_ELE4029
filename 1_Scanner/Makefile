@@ -9,6 +9,19 @@ CC = gcc
 CFLAGS = 
 
 OBJS = main.o util.o scan.o parse.o symtab.o analyze.o code.o cgen.o
+OBJS_FLEX = main.o util.o lex.yy.o
+
+#by flex
+default:
+	make cminus_flex
+	make cminus_cimpl
+
+cminus_flex: $(OBJS_FLEX)
+	$(CC) $(CFLAGS) main.o util.o lex.yy.o -o cminus_flex -lfl
+
+lex.yy.o: cminus.l scan.h util.h globals.h
+	flex cminus.l
+	$(CC) $(CFLAGS) -c lex.yy.c -lfl
 
 cminus_cimpl: $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o cminus_cimpl
@@ -41,6 +54,9 @@ clean:
 	-rm cminus_cimpl
 	-rm tm
 	-rm $(OBJS)
+	-rm lex.yy.c
+	-rm lex.yy.o
+	-rm cminus_flex
 
 tm: tm.c
 	$(CC) $(CFLAGS) tm.c -o tm
