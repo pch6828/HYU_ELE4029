@@ -9,22 +9,21 @@ CC = gcc
 CFLAGS = 
 
 OBJS = main.o util.o scan.o parse.o symtab.o analyze.o code.o cgen.o
-OBJS_FLEX = main.o util.o lex.yy.o
+OBJS_FLEX = main.o util.o lex.yy.o parse.o symtab.o analyze.o code.o cgen.o
 
-#by flex
-default:
-	make cminus_flex
-	make cminus_cimpl
+.PHONY: all scanner_cimpl scanner_flex $(OBJS) $(OBJS_FLEX) lex.yy.c
 
-cminus_flex: $(OBJS_FLEX)
-	$(CC) $(CFLAGS) main.o util.o lex.yy.o -o cminus_flex -lfl
+all: scanner_cimpl scanner_flex
 
-lex.yy.o: cminus.l scan.h util.h globals.h
-	flex cminus.l
-	$(CC) $(CFLAGS) -c lex.yy.c -lfl
+scanner_cimpl: $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $@
 
-cminus_cimpl: $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o cminus_cimpl
+scanner_flex: $(OBJS_FLEX)
+	$(CC) $(CFLAGS) $(OBJS_FLEX) -o $@ -lfl
+
+lex.yy.o: cminus.l
+	flex $^
+	$(CC) $(CFLAGS) -c lex.yy.c
 
 main.o: main.c globals.h util.h scan.h parse.h analyze.h cgen.h
 	$(CC) $(CFLAGS) -c main.c
@@ -51,15 +50,5 @@ cgen.o: cgen.c globals.h symtab.h code.h cgen.h
 	$(CC) $(CFLAGS) -c cgen.c
 
 clean:
-	-rm cminus_cimpl
-	-rm tm
-	-rm $(OBJS)
-	-rm lex.yy.c
-	-rm lex.yy.o
-	-rm cminus_flex
-
-tm: tm.c
-	$(CC) $(CFLAGS) tm.c -o tm
-
-all: cminus_cimpl tm
+	rm -vf scanner_cimpl scanner_flex *.o lex.yy.c
 
