@@ -193,8 +193,8 @@ TokenType getToken(void)
          }
          break;
        case INNE:
+         state = DONE;
          if (c == '=') {
-           state = DONE;
            currentToken = NE;
          }
          else
