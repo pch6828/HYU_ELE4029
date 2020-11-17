@@ -13,15 +13,13 @@
  */
 void printToken( TokenType, const char* );
 
-/* Function newStmtNode creates a new statement
+/* Function newStmtNode creates a new non-terminal;
  * node for syntax tree construction
  */
 TreeNode * newStmtNode(StmtKind);
-
-/* Function newExpNode creates a new expression 
- * node for syntax tree construction
- */
 TreeNode * newExpNode(ExpKind);
+TreeNode * newDeclNode(DeclKind);
+TreeNode * newParamNode(ParamKind);
 
 /* Function copyString allocates and makes a new
  * copy of an existing string
