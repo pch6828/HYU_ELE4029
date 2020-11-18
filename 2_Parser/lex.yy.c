@@ -913,7 +913,7 @@ YY_RULE_SETUP
 case 30:
 YY_RULE_SETUP
 #line 53 "cminus.l"
-{ char c1, c2;
+{ char c1 = '\0', c2 = '\0';
                   do
                   { 
                     c1 = c2;

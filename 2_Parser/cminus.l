@@ -50,7 +50,7 @@ whitespace  [ \t]+
 {identifier}    {return ID;}
 {newline}       {lineno++;}
 {whitespace}    {/* skip whitespace */}
-"/*"            { char c1, c2;
+"/*"            { char c1 = '\0', c2 = '\0';
                   do
                   { 
                     c1 = c2;
