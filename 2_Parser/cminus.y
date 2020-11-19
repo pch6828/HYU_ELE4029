@@ -22,13 +22,17 @@ int yyerror(char * message);
 
 %}
 
-%token IF ELSE INT RETURN VOID WHILE
-%token PLUS MINUS TIMES OVER LT LE GT GE EQ NE ASSIGN SEMI COMMA 
+%token IF INT RETURN VOID WHILE
+%left PLUS MINUS TIMES OVER 
+%token LT LE GT GE EQ NE ASSIGN SEMI COMMA 
 %token LPAREN RPAREN LCURLY RCURLY LBRACE RBRACE 
 %token ID NUM LETTER DIGIT
 %token ERROR 
 
-%% /* Grammar for TINY */
+%nonassoc NO_ELSE
+%nonassoc ELSE
+
+%% /* Grammar for CMINUS */
 
 program               : declaration_list
                           { 
@@ -276,7 +280,7 @@ expression_stmt       : expression SEMI
                             $$ = NULL;
                           }         
                       ;
-if_stmt               : IF LPAREN expression RPAREN stmt
+if_stmt               : IF LPAREN expression RPAREN stmt %prec NO_ELSE
                           { 
                             $$ = newStmtNode(IfK);
                             $$->child[0] = $3;

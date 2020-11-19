@@ -11,6 +11,7 @@ int gcd (int u, int v)
 void main(void)
 {
     int x; int y;
+    if ( 1 ) if( 2 ) x = 1; else y = 2; else z = 3;
     x = input(); y = input();
     output(gcd(x,y));
 }
