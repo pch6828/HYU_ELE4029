@@ -224,7 +224,7 @@ void printTree( TreeNode * tree )
           fprintf(listing, "Function declaration, name : %s, return type : %s\n", tree->attr.decl.name, (tree->attr.decl.type==VOID?"void":"int"));
           break;
         case ArrVarK:
-          fprintf(listing, "Array declaration, name : %s, type : %s size : %d\n", tree->attr.arr.name, (tree->attr.arr.type==VOID?"void":"int"), tree->attr.arr.size);
+          fprintf(listing, "Array declaration, name : %s, type : %s, size : %d\n", tree->attr.arr.name, (tree->attr.arr.type==VOID?"void":"int"), tree->attr.arr.size);
           break;
         default:
           fprintf(listing,"Unknown DeclNode kind\n");
