@@ -102,9 +102,12 @@ var_declaration       : VOID identifier SEMI
                             //save line #
                             $$->lineno = lineno;
                             //save name and size
-                            $$->attr.arr.name = savedName;
-                            $$->attr.arr.size = savedNum;
-                            $$->attr.arr.type = VOID;
+                            $$->attr.decl.name = savedName;
+                            $$->attr.decl.type = VOID;
+
+                            YYSTYPE size = newExpNode(ConstK);
+                            size->attr.val = savedNum;
+                            $$->child[0] = size;
                           }                      
                           | INT identifier LBRACE number RBRACE SEMI  
                           {
@@ -112,9 +115,12 @@ var_declaration       : VOID identifier SEMI
                             //save line #
                             $$->lineno = lineno;
                             //save name and size
-                            $$->attr.arr.name = savedName;
-                            $$->attr.arr.size = savedNum;
-                            $$->attr.arr.type = INT;
+                            $$->attr.decl.name = savedName;
+                            $$->attr.decl.type = INT;
+
+                            YYSTYPE size = newExpNode(ConstK);
+                            size->attr.val = savedNum;
+                            $$->child[0] = size;
                           }
                       ;
 fun_declaration       : INT identifier 
@@ -128,9 +134,8 @@ fun_declaration       : INT identifier
                           {
                             $$ = $3;
                             //save type, parameters, body
-                            $$->child[0] = $1;
-                            $$->child[1] = $5;
-                            $$->child[2] = $7;
+                            $$->child[0] = $5;
+                            $$->child[1] = $7;
                           } 
                       | VOID identifier 
                           {
@@ -143,9 +148,8 @@ fun_declaration       : INT identifier
                           {
                             $$ = $3;
                             //save type, parameters, body
-                            $$->child[0] = $1;
-                            $$->child[1] = $5;
-                            $$->child[2] = $7;
+                            $$->child[0] = $5;
+                            $$->child[1] = $7;
                           } 
                       ;
 params                : param_list 

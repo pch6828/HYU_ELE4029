@@ -69,12 +69,6 @@ typedef enum {VarK,FunK,ArrVarK} DeclKind;
 typedef enum {OpK,ConstK,IdK,AssignK,ArrIdK,CallK} ExpKind;
 typedef enum {ArrParamK, NonArrParamK} ParamKind;
 
-typedef struct arrayAttr {
-  TokenType type;
-  char * name;
-  int size;
-} ArrayAttr;
-
 typedef struct declAttr {
   TokenType type;
   char * name;
@@ -92,11 +86,9 @@ typedef struct treeNode
      NodeKind nodekind;
      union { StmtKind stmt; ExpKind exp; DeclKind decl;ParamKind param;} kind;
      union { TokenType op;
-             TokenType type;
              int val;
              char * name; 
-             DeclAttr decl;
-             ArrayAttr arr;} attr;
+             DeclAttr decl;} attr;
      ExpType type; /* for type checking of exps */
    } TreeNode;
 
