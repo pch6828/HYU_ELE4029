@@ -1,5 +1,5 @@
 void novalue;
-void noarray[50];
+void noarray[50+50];
 int value;
 int array[10];
 
