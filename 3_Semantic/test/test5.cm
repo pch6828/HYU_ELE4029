@@ -1,0 +1,15 @@
+void novalue;
+void noarray[50];
+int value;
+int array[10];
+
+int size(void arr[]){
+    return strlen(arr)/sizeof(arr[0]);
+}
+
+
+int main(void){
+    {
+        output(array[10+value/3]);
+    }
+}

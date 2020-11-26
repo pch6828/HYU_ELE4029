@@ -1,0 +1,8 @@
+int main(void){
+    int a; int b; int c;
+    if ( a == b ) 
+        if ( b == c ) 
+            output(1); 
+        else 
+            output(y);
+}
