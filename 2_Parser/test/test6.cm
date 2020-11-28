@@ -1,0 +1,9 @@
+void main(void)
+{
+   if (a)
+      while (a)
+      if (a)
+         ;
+   else
+      ;
+}
