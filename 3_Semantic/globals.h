@@ -75,7 +75,9 @@ typedef struct declAttr {
 } DeclAttr;
 
 /* ExpType is used for type checking */
-typedef enum {Void,Integer,Boolean,IntegerArray} ExpType;
+typedef enum {Void,Integer,IntegerArray,Function} ExpType;
+
+struct ScopeListRec;
 
 #define MAXCHILDREN 3
 
@@ -89,6 +91,7 @@ typedef struct treeNode
              int val;
              char * name; 
              DeclAttr decl;} attr;
+     struct ScopeListRec* scope;
      ExpType type; /* for type checking of exps */
    } TreeNode;
 
