@@ -273,7 +273,7 @@ static void checkNode(TreeNode * t)
           t->type = Integer;
           break;
         case IdK:
-          if ((long long int)((l = st_lookup(t->scope, t->attr.name)))==-1){
+          if ((long long int)((l = st_lookup(t->scope, t->attr.name)))==-1 || l->lines->lineno > t->lineno){
             scopeError(t, t->attr.name);
             t->type = Invalid;
           }else{
@@ -281,7 +281,7 @@ static void checkNode(TreeNode * t)
           }
           break;
         case ArrIdK:
-          if ((long long int)((l = st_lookup(t->scope, t->attr.name)))==-1){
+          if ((long long int)((l = st_lookup(t->scope, t->attr.name)))==-1 || l->lines->lineno > t->lineno){
             scopeError(t, t->attr.name);
             t->type = Invalid;
           }else if(t->child[0]->type != Integer){
@@ -299,7 +299,7 @@ static void checkNode(TreeNode * t)
           }
           break;
         case CallK:
-          if ((long long int)((l = st_lookup(t->scope, t->attr.name))) == -1){
+          if ((long long int)((l = st_lookup(t->scope, t->attr.name))) == -1 || l->lines->lineno > t->lineno){
             scopeError(t, t->attr.name);
           }else{
             TreeNode* args = t->child[0];
