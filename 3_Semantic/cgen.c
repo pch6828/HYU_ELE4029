@@ -68,15 +68,15 @@ static void genStmt( TreeNode * tree)
       //    if (TraceCode)  emitComment("<- repeat") ;
       //    break; /* repeat */
 
-      case AssignK:
-         if (TraceCode) emitComment("-> assign") ;
-         /* generate code for rhs */
-         cGen(tree->child[0]);
-         /* now store value */
-         loc = st_lookup(tree->attr.name);
-         emitRM("ST",ac,loc,gp,"assign: store value");
-         if (TraceCode)  emitComment("<- assign") ;
-         break; /* assign_k */
+      // case AssignK:
+      //    if (TraceCode) emitComment("-> assign") ;
+      //    /* generate code for rhs */
+      //    cGen(tree->child[0]);
+      //    /* now store value */
+      //    loc = st_lookup(tree->attr.name);
+      //    emitRM("ST",ac,loc,gp,"assign: store value");
+      //    if (TraceCode)  emitComment("<- assign") ;
+      //    break; /* assign_k */
 
       // case ReadK:
       //    emitRO("IN",ac,0,0,"read integer value");
@@ -107,12 +107,12 @@ static void genExp( TreeNode * tree)
       if (TraceCode)  emitComment("<- Const") ;
       break; /* ConstK */
     
-    case IdK :
-      if (TraceCode) emitComment("-> Id") ;
-      loc = st_lookup(tree->attr.name);
-      emitRM("LD",ac,loc,gp,"load id value");
-      if (TraceCode)  emitComment("<- Id") ;
-      break; /* IdK */
+   //  case IdK :
+   //    if (TraceCode) emitComment("-> Id") ;
+   //    loc = st_lookup(tree->attr.name);
+   //    emitRM("LD",ac,loc,gp,"load id value");
+   //    if (TraceCode)  emitComment("<- Id") ;
+   //    break; /* IdK */
 
     case OpK :
          if (TraceCode) emitComment("-> Op") ;

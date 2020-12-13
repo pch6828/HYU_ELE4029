@@ -17,33 +17,50 @@
    in hash function  */
 #define SHIFT 4
 
-typedef struct ScopeStack{
-    Scope scope;
-    int cnt;
-    struct ScopeStack* next;
-}* Stack;
-
 Scope scopelist = NULL;
-Stack stack = NULL;
+ScopeStack stack = NULL;
 
-Stack top(){
+Scope getglobal(){
+  ScopeStack iter = stack;
+  while(iter->next){
+    iter = iter->next;
+  }
+  return iter->scope;
+}
+
+void addparam(BucketList func, ExpType type){
+  ParamList temp = (ParamList)malloc(sizeof(struct ParamListRec));
+  temp->next = NULL;
+  temp->type = type;
+  ParamList iter = func->params;
+  if(iter == NULL){
+    func->params = temp;
+    return;
+  }
+  while(iter->next){
+    iter = iter->next;
+  }
+  iter->next = temp;
+}
+
+ScopeStack top(){
   if(stack==NULL){
-    stack = (Stack)malloc(sizeof(struct ScopeStack));
-    memset(stack, 0, sizeof(struct ScopeStack));
+    stack = (ScopeStack)malloc(sizeof(struct ScopeStackRec));
+    memset(stack, 0, sizeof(struct ScopeStackRec));
   }
   return stack->next;
 }
 
-Scope pushstack(){
+Scope pushstack(char* name){
   if(stack==NULL){
-    stack = (Stack)malloc(sizeof(struct ScopeStack));
-    memset(stack, 0, sizeof(struct ScopeStack));
+    stack = (ScopeStack)malloc(sizeof(struct ScopeStackRec));
+    memset(stack, 0, sizeof(struct ScopeStackRec));
   }
-  Stack temp = (Stack)malloc(sizeof(struct ScopeStack));
+  ScopeStack temp = (ScopeStack)malloc(sizeof(struct ScopeStackRec));
   temp->cnt = 0;
   Scope scope = (Scope)malloc(sizeof(struct ScopeListRec));
   memset(scope, 0, sizeof(struct ScopeListRec));
-  
+  scope->name = name;
   if(scopelist){
     Scope iter = scopelist;
     while(iter->next){
@@ -53,7 +70,7 @@ Scope pushstack(){
   }else{
     scopelist = scope;
   }
-  Stack tos = top();
+  ScopeStack tos = top();
   if(tos){
     scope->parent = tos->scope;
   }
@@ -68,6 +85,14 @@ void popstack(){
   if(stack && stack->next){
     stack->next = stack->next->next;
   }
+}
+
+void addlineno(BucketList l, int lineno){
+  LineList t = l->lines;
+  while (t->next != NULL) t = t->next;
+  t->next = (LineList) malloc(sizeof(struct LineListRec));
+  t->next->lineno = lineno;
+  t->next->next = NULL;  
 }
 
 /* the hash function */
@@ -98,50 +123,44 @@ void st_insert( Scope scope, char * name, ExpType type, int lineno, int loc )
   { 
     l = (BucketList) malloc(sizeof(struct BucketListRec));
     l->name = name;
+    l->type = type;
     l->lines = (LineList) malloc(sizeof(struct LineListRec));
+    l->params = NULL;
     l->lines->lineno = lineno;
     l->memloc = loc;
     l->lines->next = NULL;
     l->next = scope->bucket[h];
     scope->bucket[h] = l; 
   }
-  else /* found in table, so just add line number */
-  { 
-    LineList t = l->lines;
-    while (t->next != NULL) t = t->next;
-    t->next = (LineList) malloc(sizeof(struct LineListRec));
-    t->next->lineno = lineno;
-    t->next->next = NULL;
-  }
 } /* st_insert */
 
 /* Function st_lookup returns the memory 
  * location of a variable or -1 if not found
  */
-int st_lookup ( Scope scope, char * name )
+BucketList st_lookup ( Scope scope, char * name )
 { 
   if(scope==NULL){
-    return -1;
+    return (BucketList)(-1);
   }
   int h = hash(name);
   BucketList l = scope->bucket[h];
   while ((l != NULL) && (strcmp(name,l->name) != 0))
     l = l->next;
   if (l == NULL) return st_lookup(scope->parent, name);
-  else return l->memloc;
+  else return l;
 }
 
 /* Function st_lookup_excluding_parent returns the memory 
  * location of a variable or -1 if not found
  */
-int st_lookup ( Scope scope, char * name )
+BucketList st_lookup_excluding_parent ( Scope scope, char * name )
 { 
   int h = hash(name);
   BucketList l = scope->bucket[h];
   while ((l != NULL) && (strcmp(name,l->name) != 0))
     l = l->next;
-  if (l == NULL) return -1;
-  else return l->memloc;
+  if (l == NULL) return (BucketList)(-1);
+  else return l;
 }
 
 /* Procedure printSymTab prints a formatted 
@@ -162,7 +181,7 @@ void printSymTab(FILE * listing)
         { LineList t = l->lines;
           fprintf(listing,"%-13s  ",l->name);
           fprintf(listing,"%-13s  ",(l->type==Integer?"Integer":(l->type==IntegerArray?"Integer array":"Function")));
-          fprintf(listing,"%-10d  ",iter->name);
+          fprintf(listing,"%-10s  ",iter->name);
           fprintf(listing,"%-8d  ",l->memloc);
           while (t != NULL)
           { fprintf(listing,"%4d ",t->lineno);

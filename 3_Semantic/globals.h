@@ -75,7 +75,7 @@ typedef struct declAttr {
 } DeclAttr;
 
 /* ExpType is used for type checking */
-typedef enum {Void,Integer,IntegerArray,Function} ExpType;
+typedef enum {Void,Integer,IntegerArray,IntFunction,VoidFunction,Invalid} ExpType;
 
 struct ScopeListRec;
 
