@@ -1,0 +1,15 @@
+int fa(int a[], int b){
+    return;
+}
+
+void fb(int c, int d[]){
+    return c;
+}
+
+void main(void){
+    int arr[10];
+    int num;
+
+    fa(num, num);
+    fb(num, arr);
+}

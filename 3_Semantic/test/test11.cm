@@ -1,9 +1,5 @@
 int arr[10];
 
-int func(void){
-    return func();
-}
-
 void main(void){
     int main;
     
