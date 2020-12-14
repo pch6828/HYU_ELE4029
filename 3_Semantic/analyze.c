@@ -301,6 +301,8 @@ static void checkNode(TreeNode * t)
         case CallK:
           if ((long long int)((l = st_lookup(t->scope, t->attr.name))) == -1 || l->lines->lineno > t->lineno){
             scopeError(t, t->attr.name);
+          }else if (l->type!=IntFunction&&l->type!=VoidFunction){
+            typeError(t, "invalid function call");
           }else{
             TreeNode* args = t->child[0];
             ParamList params = l->params;
