@@ -110,6 +110,7 @@ static void insertNode( TreeNode * t)
             }else{
               sprintf(message, "variable type cannot be void (name : %s)", t->attr.decl.name);
               declError(t, message);
+              st_insert(scope, t->attr.decl.name, Invalid, t->lineno, tos->cnt++);
             }
           }else{
             sprintf(message, "re-declaration of symbol (name : %s)", t->attr.decl.name);
@@ -139,6 +140,7 @@ static void insertNode( TreeNode * t)
             }else{
               sprintf(message, "variable type cannot be void (name : %s)", t->attr.decl.name);
               declError(t, message);
+              st_insert(scope, t->attr.decl.name, Invalid, t->lineno, tos->cnt++);
             }
           }else{
             sprintf(message, "re-declaration of symbol (name : %s)", t->attr.decl.name);
@@ -197,6 +199,7 @@ static void insertNode( TreeNode * t)
             }else{
               sprintf(message, "parameter type cannot be void (name : %s)", t->attr.decl.name);
               declError(t, message);
+              st_insert(scope, t->attr.decl.name, Invalid, t->lineno, tos->cnt++);
             }
           }else{
             sprintf(message, "re-declaration of symbol (name : %s)", t->attr.decl.name);
@@ -215,6 +218,7 @@ static void insertNode( TreeNode * t)
             }else{
               sprintf(message, "parameter type cannot be void (name : %s)", t->attr.decl.name);
               declError(t, message);
+              st_insert(scope, t->attr.decl.name, Invalid, t->lineno, tos->cnt++);
             }
           }else{
             sprintf(message, "re-declaration of symbol (name : %s)", t->attr.decl.name);
@@ -328,11 +332,11 @@ static void checkNode(TreeNode * t)
       { 
         case IfK:
           if (t->child[0]->type != Integer)
-            typeError(t->child[0],"if test is not Boolean");
+            typeError(t->child[0],"if test is not integer");
           break;
         case IterK:
           if (t->child[0]->type != Integer)
-            typeError(t->child[0],"while test is not Boolean");
+            typeError(t->child[0],"while test is not integer");
           break;
         case ReturnK:
           name = t->scope->name;
